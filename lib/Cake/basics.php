@@ -1086,6 +1086,8 @@ if (!function_exists('json_last_error_msg')) {
 
 if (!function_exists('mysql_escape_string')) {
 
-	return mysqli_real_escape_string($data);
+	function mysql_escape_string(){
+		return mysqli_real_escape_string($data);
+	}
 	
 }
