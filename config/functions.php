@@ -312,12 +312,12 @@
     }
     
     function et($text, $length = 100, $options = array()){
-        e(String::truncate($text, $length, $options));
+        e(CakeText::truncate($text, $length, $options));
     }
 
     function eth($text, $length = 1000, $options = array()){
         $text = strip_tags($text);
-        e(String::truncate($text, $length, $options));
+        e(CakeText::truncate($text, $length, $options));
     }
         
     function eurl($url){
