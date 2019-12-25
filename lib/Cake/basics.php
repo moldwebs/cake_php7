@@ -1085,10 +1085,9 @@ if (!function_exists('json_last_error_msg')) {
 }
 
 if (!function_exists('mysql_escape_string')) {
-	function mysql_escape_string($data){
-		$search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");
-		$replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
-	
-		return str_replace($search, $replace, $data);
+
+	function mysql_escape_string(){
+		return mysqli_real_escape_string($data);
 	}
+	
 }
