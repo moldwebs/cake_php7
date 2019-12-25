@@ -25,6 +25,9 @@ class OrderController extends ShopAppController {
         $this->set('sys_order_statuses', array('0' => ___('New', true), '1' => ___('In processing', true), '3' => ___('Custom made', true), '4' => ___('Custom ready', true), '2' => ___('Agreed', true), '5' => ___('Canceled', true)));
         $this->set('sys_order_ship_statuses', array('0' => ___('Waiting', true), '1' => ___('New', true), '2' => ___('In processing', true), '3' => ___('Postponed', true), '4' => ___('Shipped', true), '5' => ___('Partial delivered', true), '6' => ___('Delivered', true), '7' => ___('Canceled', true)));
         $this->set('sys_order_pay_statuses', array('0' => ___('Not Paid', true), '1' => ___('Paid', true), '2' => ___('Waiting payment', true)));
+
+        $operators = ClassRegistry::init('Users.User')->find('list', array('fields' => array('id', 'username'), 'conditions' => array("role <> 'user'"), 'order' => array('username' => 'asc')));
+        $this->set('operators', $operators);
     }
     
     public function admin_table_actions(){
@@ -34,6 +37,8 @@ class OrderController extends ShopAppController {
     
     public function admin_index(){
         $this->set('page_title', ___('Orders') . ' :: ' . ___('List'));
+        
+        $this->ModOrder->virtualFields['long_data'] = "DATA";
         
         $this->set('items', $this->paginate('ModOrder', $this->Basic->filters('ModOrder')));
         

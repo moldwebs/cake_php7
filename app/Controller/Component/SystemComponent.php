@@ -4,7 +4,7 @@ class SystemComponent extends Component {
     protected $_controller = null;
     
     public function initialize(Controller $controller) {
-        // The initialize method is called before the controller’s beforeFilter method.
+        // The initialize method is called before the controllerï¿½s beforeFilter method.
         
         Configure::write('EXEC_TIME_LOGS', am(Configure::read('EXEC_TIME_LOGS'), array('SystemComponent1:' . date("Y-m-d H:i:s"))));
         
@@ -16,6 +16,7 @@ class SystemComponent extends Component {
         }        
 
         if(isset($this->_controller->request->params['admin'])){
+            Configure::write('TMP.sql_no_cache', '1');
         	Configure::write('Session', array(
         		'defaults' => 'database',
                 'ini' => array(
@@ -61,7 +62,7 @@ class SystemComponent extends Component {
     
 
 	public function startup(Controller $controller) {
-	    //The startup method is called after the controller’s beforeFilter method but before the controller executes the current action handler.
+	    //The startup method is called after the controllerï¿½s beforeFilter method but before the controller executes the current action handler.
         $this->__setLanguages();
         if(count($this->_controller->cms['languages']) > 1) Configure::write('Config.req_language', Configure::read('Config.language'));   
 	}

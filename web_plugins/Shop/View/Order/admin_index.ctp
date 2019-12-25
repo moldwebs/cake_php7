@@ -91,7 +91,7 @@
                         </td>
                         <td style="text-align: center;">
                             <div style="line-height: 17px;"><?php e(date_stl_1($item['ModOrderAction'][0]['created']))?></div>
-                            <div style="line-height: 17px; font-size: 90%;"><?php eth($item['ModOrderAction'][0]['Operator']['username'], 50)?></div>
+                            <div style="line-height: 17px; font-size: 90%;"><?php eth($operators[$item['ModOrderAction'][0]['operator_id']], 50)?></div>
                         </td>
                 		<td style="text-align: center;">
                             <?php echo $this->Html->link('', array('action' => 'print', $item[$ws_model]['id']), array('class' => 'ico ico_print', 'target' => '_blank', 'title' => ___('Print'))); ?>

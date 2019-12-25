@@ -12,7 +12,7 @@ class ModOrderAction extends ShopAppModel {
                 $results[$key][$this->alias]['data'] = json_decode($val[$this->alias]['data'], true);
             }
             if(!empty($val[$this->alias]['operator_id'])) {
-                $results[$key][$this->alias]['Operator'] = ClassRegistry::init('Users.User')->findById($results[$key][$this->alias]['operator_id'])['User'];
+                //$results[$key][$this->alias]['Operator'] = ClassRegistry::init('Users.User')->findById($results[$key][$this->alias]['operator_id'])['User'];
             }
         }
         return $results;
