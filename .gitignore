@@ -1,0 +1,5 @@
+/app/tmp/*
+/web_config/*
+
+/web_views/template/*
+!/web_views/template/.htaccess
