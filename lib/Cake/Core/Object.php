@@ -101,7 +101,17 @@ class Object {
 		}
 
 		$dispatcher = new Dispatcher();
-		$result = $dispatcher->dispatch($request, new CakeResponse(), $extra);
+		//$result = $dispatcher->dispatch($request, new CakeResponse(), $extra);
+		// MYX
+		try{
+		    $result = $dispatcher->dispatch($request, new CakeResponse(), $extra);
+		    if(Configure::read('debug') > 1){
+			//echo "requestAction: ".$request->fullhere;
+		    }
+		    //Configure::write('TMP.sql_no_cache', '0');
+		}catch (Exception $e){
+		    echo "requestAction error: ".$request->fullhere . $e->getMessage();
+		}
 		Router::popRequest();
 		return $result;
 	}
