@@ -228,7 +228,11 @@ if (!function_exists('h')) {
 		if (is_string($double)) {
 			$charset = $double;
 		}
-		return htmlspecialchars($text, ENT_QUOTES, ($charset) ? $charset : $defaultCharset, $double);
+        	//MYX
+		//return htmlspecialchars($text, ENT_QUOTES, ($charset) ? $charset : $defaultCharset, $double);
+        	$text = htmlspecialchars($text, ENT_QUOTES, ($charset) ? $charset : $defaultCharset, $double);
+        	$text = str_replace('&amp;_nbsp;', '&nbsp;', $text);
+		return $text;
 	}
 
 }
