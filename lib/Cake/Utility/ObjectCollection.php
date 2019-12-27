@@ -125,7 +125,11 @@ abstract class ObjectCollection {
 		}
 		$result = null;
 		foreach ($list as $name) {
+		    	// MYX
+		    	$_microtime_start = microtime(true);
 			$result = call_user_func_array(array($this->_loaded[$name], $callback), compact('subject') + $params);
+		    	if((microtime(true) - $_microtime_start) > 0.1) Configure::write('EXEC_TIME_LOGS_read', am(Configure::read('EXEC_TIME_LOGS_read'), array('Event-' . $callback . '-' . $name . '-'.round(microtime(true) - $_microtime_start, 4).'s')));
+
 			if ($options['collectReturn'] === true) {
 				$collected[] = $result;
 			}
