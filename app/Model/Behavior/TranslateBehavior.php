@@ -88,11 +88,12 @@ class TranslateBehavior extends ModelBehavior {
 	}
    
     public function afterSave(Model $model, $created){
+        $_schema = $model->_schema;
         if(count(Configure::read('CMS.activelanguages')) > 1){
             $model->I18n->deleteAll(array('I18n.model' => $model->alias, 'I18n.foreign_key' => $model->id));
             if(!empty($model->data['Translates'][$model->alias])) foreach(array_keys($model->data['Translates'][$model->alias]) as $field){
                 $model->data['Translates'][$model->alias][$field][Configure::read('Config.def_language')] = $model->data[$model->alias][$field];
-                if(isset($model->_schema[$field])) foreach($model->data['Translates'][$model->alias][$field] as $locale => $content) if(!empty($content)){
+                if(isset($_schema[$field])) foreach($model->data['Translates'][$model->alias][$field] as $locale => $content) if(!empty($content)){
                     $model->I18n->create();
                     $model->I18n->save(array('locale' => $locale, 'model' => $model->alias, 'foreign_key' => $model->id, 'field' => $field, 'content' => $content));
                 }
