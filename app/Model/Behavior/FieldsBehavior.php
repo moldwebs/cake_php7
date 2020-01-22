@@ -61,10 +61,11 @@ class FieldsBehavior extends ModelBehavior {
    } 
 
     public function afterSave(Model $model, $created){
+        $_schema = $model->_schema;
         $model->ObjOptField->deleteAll(array('ObjOptField.model' => $model->alias, 'ObjOptField.foreign_key' => $model->id));
         foreach($model->data[$model->alias] as $key => $val){
             if(is_array($val)) continue;
-            if(!isset($model->_schema[$key]) && (!empty($val) || !empty($model->data['Translates'][$model->alias][$key]))){
+            if(!isset($_schema[$key]) && (!empty($val) || !empty($model->data['Translates'][$model->alias][$key]))){
                 $model->ObjOptField->create();
                 $model->ObjOptField->save(array('ObjOptField' => array('model' => $model->alias, 'foreign_key' => $model->id, 'field' => $key, 'value' => $val), 'Translates' => array('ObjOptField' => array('value' => $model->data['Translates'][$model->alias][$key]))));
             }
