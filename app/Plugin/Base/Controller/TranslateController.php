@@ -1,105 +1,105 @@
 <?php
+class TranslateController extends BaseAppController {
 
-App::uses('I18n', 'I18n');
-App::uses('I18nModel', 'Model');
+    public $uses = array();
 
-class TranslateBehavior extends ModelBehavior {
-
-	public function setup(Model $model, $settings = array()) {
-
-		$default = array(
-			'className' => 'I18nModel',
-			'foreignKey' => 'foreign_key',
-            'dependent' => true,
-            'callbacks' => true,
-            'recursive' => 2
-		);
-
-		$associations['I18n'] = array_merge($default, array('conditions' => array(
-			'I18n.model' => $model->name,
-			'I18n.field' => $settings
-		)));
-        
-        if(count(Configure::read('CMS.activelanguages')) > 1) $model->bindModel(array('hasMany' => $associations), false);
-        
-		$this->settings[$model->alias] = $settings;
-	}
-   
-    public function afterFind(Model $model, $results, $primary) {
-        Configure::write('EXEC_TIME_LOGS', am(Configure::read('EXEC_TIME_LOGS'), array('TranslateBehavior1:' . "({$model->_tid})" . date("Y-m-d H:i:s"). ' / ' . microtime(true))));
-        if(count(Configure::read('CMS.activelanguages')) > 1) if(!empty($results)){
-            $locale = Configure::read('Config.language');
-            $def_locale = Configure::read('Config.def_language');
+    public $paginate = array(
+        'CmsTranslate' => array(
+            'paramType' => 'querystring',
+            'order' => array(
+                'CmsTranslate.key' => 'asc'
+            ),
+            'limit' => 1000,
+        )
+    );
     
-            foreach($results as $key => $result){
-                if(!empty($result['I18n'])){
-                    foreach($result['I18n'] as $i18n){
-                        if(!empty($i18n['content']) && $i18n['locale'] == $locale && isset($result[$i18n['model']][$i18n['field']])) $results[$key][$i18n['model']][$i18n['field']] = $i18n['content'];
-                        $results[$key]['Translates'][$i18n['model']][$i18n['field']][$i18n['locale']] = $i18n['content'];
-                    }
-                    unset($results[$key]['I18n']);
-                }
-                
-                foreach($this->settings[$model->alias] as $field) if(empty($results[$key]['Translates'][$model->alias][$field][$def_locale])) $results[$key]['Translates'][$model->alias][$field][$def_locale] = $results[$key][$model->alias][$field];
-                
-                if(!empty($model->belongsTo)){
-                    foreach($model->belongsTo as $assoc => $assocData){
-                        if(!empty($result[$assoc]['I18n'])){
-                            foreach($result[$assoc]['I18n'] as $i18n){
-                                if(!empty($i18n['content']) && $i18n['locale'] == $locale && isset($result[$assoc][$i18n['field']])) $results[$key][$assoc][$i18n['field']] = $i18n['content'];
-                                $results[$key]['Translates'][$assoc][$i18n['field']][$i18n['locale']] = $i18n['content'];
-                            }
-                            unset($results[$key][$assoc]['I18n']);
-                        }
-                    }
-                }
-                if(!empty($model->hasOne)){
-                    foreach($model->hasOne as $assoc => $assocData){
-                        if(!empty($result[$assoc]['I18n'])){
-                            foreach($result[$assoc]['I18n'] as $i18n){
-                                if(!empty($i18n['content']) && $i18n['locale'] == $locale && isset($result[$assoc][$i18n['field']])) $results[$key][$assoc][$i18n['field']] = $i18n['content'];
-                                $results[$key]['Translates'][$assoc][$i18n['field']][$i18n['locale']] = $i18n['content'];
-                            }
-                            unset($results[$key][$assoc]['I18n']);
-                        }
-                    }
-                }
-            }
-        }
-        Configure::write('EXEC_TIME_LOGS', am(Configure::read('EXEC_TIME_LOGS'), array('TranslateBehavior2:' . "({$model->_tid})" . date("Y-m-d H:i:s"). ' / ' . microtime(true))));
-        return $results;
-    } 
-
-	public function beforeValidate(Model $model) {
-        if(count(Configure::read('CMS.activelanguages')) > 1) foreach($model->data['Translates'] as $key => $val){
-            foreach($val as $_key => $_val){
-                if(isset($_val[Configure::read('Config.def_language')]) && empty($model->data[$key][$_key])) $model->data[$key][$_key] = $_val[Configure::read('Config.def_language')];
-                if(empty($model->data[$key][$_key])){
-                    foreach($_val as $__val){
-                        if(!empty($__val)){
-                            $model->data[$key][$_key] = $__val;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-		return true;
-	}
-   
-    public function afterSave(Model $model, $created){
-        $_schema = $model->_schema;
-        if(count(Configure::read('CMS.activelanguages')) > 1){
-            $model->I18n->deleteAll(array('I18n.model' => $model->alias, 'I18n.foreign_key' => $model->id));
-            if(!empty($model->data['Translates'][$model->alias])) foreach(array_keys($model->data['Translates'][$model->alias]) as $field){
-                $model->data['Translates'][$model->alias][$field][Configure::read('Config.def_language')] = $model->data[$model->alias][$field];
-                if(isset($_schema[$field])) foreach($model->data['Translates'][$model->alias][$field] as $locale => $content) if(!empty($content)){
-                    $model->I18n->create();
-                    $model->I18n->save(array('locale' => $locale, 'model' => $model->alias, 'foreign_key' => $model->id, 'field' => $field, 'content' => $content));
-                }
-            }
-        }
-    	return true;
+    public function beforeFilter() {
+        parent::beforeFilter();
     }
 
+    public function admin_index($lang = null){
+        $this->set('page_title', ___('Translates'));
+        
+        $_translates = Configure::read('CMS.translates');
+
+        foreach(array('web_views' . DS . 'layout') as $scan_path){
+            $all_files = get_all_files(ROOT . DS . $scan_path);
+            foreach($all_files as $file){
+                $data = file_get_contents($file);
+                if(preg_match_all("/___(e|)\('(?<trnsl>(.*?))'(,(.*)|)\)/", $data, $matches)){
+                    foreach($matches['trnsl'] as $match){
+                        if(in_array($match, $translates)) continue;
+                        if(array_key_exists($match, $_translates[$lang])) continue;
+                        $translates[] = $match;
+                    }
+                }
+            }
+        }
+        
+        $locales = Configure::read('CMS.activelanguages');
+        if(!empty($translates)){
+            foreach($translates as $translate){
+                foreach($locales as $locale => $_locale){
+                    $this->CmsTranslate->insert_new(array('locale' => $locale, 'key' => $translate));
+                }
+            }
+            Cache::clearGroup('translates'); 
+        }
+               
+        
+        $this->set('items', $this->paginate('CmsTranslate', array('CmsTranslate.locale' => $lang)));
+    }
+    
+    public function admin_save($id = null, $value = ''){
+        if(!empty($_GET['value'])) $value = urldecode($_GET['value']);
+        $this->CmsTranslate->id = $id;
+        $this->CmsTranslate->save(array('value' => $value));
+        Cache::clearGroup('translates');
+        $this->Basic->back();
+    }
+
+    public function admin_edit(){
+        foreach(Configure::read('CMS.activelanguages') as $_lng => $lng){
+            $this->CmsTranslate->create();
+            $this->CmsTranslate->save(array('locale' => $_lng, 'key' => $this->data['CmsTranslate']['key'], 'value' => $this->data['value'][$_lng]));
+            Cache::clearGroup('translates');
+        }
+        $this->redirect($this->request->referer(true));
+    }
+
+	function admin_delete($id = null){
+	    $this->CmsTranslate->delete($id);
+        Cache::clearGroup('translates');
+        $this->Basic->back();
+	}
+
+    function ___admin_translate_model($model = null, $tid = null){
+        $model_obj = Classregistry::init($model);
+        $_schema = $model_obj->_schema;
+        if(!empty($this->data)){
+            foreach($this->data['Translate'] as $id => $translates){
+                foreach($translates as $lng => $val){
+                    if(trim($val) == '') continue;
+                    if($lng == Configure::read('Config.language')){
+                        $model_obj->updateAll(
+                            array("title" => sqls($val, true)),
+                            array("id" => $id)
+                        );
+                    }
+                    $this->Query->query("delete from `i18n` where `uid` = '".CMS_UID."' AND `locale` = '".sqls($lng)."' and `model` = '{$model_obj->alias}' and `foreign_key` = '".sqls($id)."' and `field` = 'title' limit 1");
+                    $this->Query->query("insert into `i18n`(`uid`, `locale`, `model`, `foreign_key`, `field`, `content`) values ('".CMS_UID."', '".sqls($lng)."','{$model_obj->alias}','".sqls($id)."','title','".sqls($val)."')");
+                }
+            }
+            exit;
+        }
+        $conditions = array();
+        if(isset($_schema['tid'])) $conditions['tid'] = $tid;
+        if(isset($this->params['named']['flt_name'])) $conditions[$this->params['named']['flt_name']] = $this->params['named']['flt_value'];
+        if(isset($this->params['named']['order'])) $order = $this->params['named']['order']; else $order = 'title';
+        $items = $model_obj->find('all', array('recursive' => '-1', 'order' => $order, 'conditions' => $conditions));
+        $this->set('items', $items);
+        $this->set('obj_name', $model_obj->name);
+        $this->set('pass_model', $model);
+        $this->set('pass_tid', $tid);
+    }
 }
