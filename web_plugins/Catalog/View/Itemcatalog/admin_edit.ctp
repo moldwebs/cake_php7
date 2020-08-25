@@ -113,7 +113,7 @@
                     <div id="rel_prods_present" class="input text" style="height: 200px; overflow-y: scroll;"></div>
                     <script>
                         $('#ObjItemListRelProdsFltrSearch').click(function(){
-                            $('#rel_prods_results').load('/admin/catalog/item/pbl_related/?fltr_eqorrel__base_id=' + $('#ObjItemListRelProdsFltr2').val() + '&fltr_lk__title=' + $('#ObjItemListRelProdsFltr1').val());
+                            $('#rel_prods_results').load('/admin/catalog/item/pbl_related?fltr_eqorrel__base_id=' + $('#ObjItemListRelProdsFltr2').val() + '&fltr_lk__title=' + $('#ObjItemListRelProdsFltr1').val());
                         });
                         $('#rel_prods_present').load('/admin/catalog/item/pbl_related/1/<?php e($this->data['ObjItemList']['id'])?>');
                     </script>
@@ -130,7 +130,7 @@
                     <div id="rel_prods_present_similar" class="input text" style="height: 200px; overflow-y: scroll;"></div>
                     <script>
                         $('#ObjItemListRelProdsFltrSearch-1').click(function(){
-                            $('#rel_prods_results_similar').load('/admin/catalog/item/pbl_similar/?fltr_eqorrel__base_id=' + $('#ObjItemListRelProdsFltr2-1').val() + '&fltr_lk__title=' + $('#ObjItemListRelProdsFltr1-1').val());
+                            $('#rel_prods_results_similar').load('/admin/catalog/item/pbl_similar?fltr_eqorrel__base_id=' + $('#ObjItemListRelProdsFltr2-1').val() + '&fltr_lk__title=' + $('#ObjItemListRelProdsFltr1-1').val());
                         });
                         $('#rel_prods_present_similar').load('/admin/catalog/item/pbl_similar/1/<?php e($this->data['ObjItemList']['id'])?>');
                     </script>

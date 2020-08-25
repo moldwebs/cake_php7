@@ -6,7 +6,7 @@
         <?php endif;?>
         
         <?php if(defined('CMS_UID_ADMIN')):?>
-            <a style="margin: 9px;" class="button small" href="/admin/?uid=0"><?php e(CMS_UID_ADMIN_DOMAIN)?></a>
+            <a style="margin: 9px;" class="button small" href="/admin?uid=0"><?php e(CMS_UID_ADMIN_DOMAIN)?></a>
         <?php endif;?>
         <a class="tipsy_bottom" title="<?php ___e('View Site')?>" target="_blank" href="<?php e(defined('CMS_UID_ADMIN') ? str_replace('://', '://' . CMS_UID_ADMIN_DOMAIN . '.' , FULL_BASE_URL) : '/')?>"><img height="25px" src="/img/ico/home_sticker.png" /></a>
         <!--

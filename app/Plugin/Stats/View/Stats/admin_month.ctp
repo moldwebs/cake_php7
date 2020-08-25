@@ -6,7 +6,7 @@
         <div class="nw-table-title">
             <div class="fl"><?php echo $page_title?></div>
             <div class="fr">
-                <?php echo $this->Form->input('date', array('options' => $select, 'selected' => $this->params->query['date'], 'label' => false, 'empty' => false, 'after' => '&nbsp;', 'style' => 'width: 200px', 'onchange' => "window.location='/admin/stats/stats/month/?date=' + this.value"));?>
+                <?php echo $this->Form->input('date', array('options' => $select, 'selected' => $this->params->query['date'], 'label' => false, 'empty' => false, 'after' => '&nbsp;', 'style' => 'width: 200px', 'onchange' => "window.location='/admin/stats/stats/month?date=' + this.value"));?>
             </div>
         </div>
         <div class="nw-table-content">

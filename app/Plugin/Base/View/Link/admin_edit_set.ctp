@@ -55,6 +55,6 @@
 <script>
     $('#ObjItemTreeDataType').on('change', function(){
         $('#contain_box > #box_module').empty();
-        if($(this).val().substring(0,4) == 'mod_') $('#contain_box > #box_module').load('/admin/' + $(this).val().substring(4) + '/system/get_linkset/?id=<?php e($this->data['ObjItemTree']['id'])?>').show();
+        if($(this).val().substring(0,4) == 'mod_') $('#contain_box > #box_module').load('/admin/' + $(this).val().substring(4) + '/system/get_linkset?id=<?php e($this->data['ObjItemTree']['id'])?>').show();
     }).trigger('change');
 </script>

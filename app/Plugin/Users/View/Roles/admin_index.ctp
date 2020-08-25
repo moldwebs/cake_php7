@@ -22,7 +22,7 @@
                         <td style="text-align: center;"><input type="checkbox" name="data[item][]" value="<?php e($item[$ws_model]['id'])?>" /></td>
                 		<td><?php et($item[$ws_model]['title'], 60)?></td>
                 		<td style="text-align: center;">
-                            <?php echo $this->Html->link('', "/admin/users/roles/permissions/{$item[$ws_model]['id']}/?tb=1", array('class' => 'ico ico_password', 'title' => ___('Permissions'))); ?>
+                            <?php echo $this->Html->link('', "/admin/users/roles/permissions/{$item[$ws_model]['id']}?tb=1", array('class' => 'ico ico_password', 'title' => ___('Permissions'))); ?>
                             &nbsp;
                             <?php echo $this->Html->link('', array('action' => 'edit', $item[$ws_model]['id']), array('class' => 'ico ico_edit', 'title' => ___('Edit'))); ?>
                             &nbsp;

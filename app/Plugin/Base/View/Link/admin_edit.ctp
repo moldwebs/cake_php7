@@ -63,7 +63,7 @@
     $('#ObjItemTreeDataType').on('change', function(){
         $('#contain_box').children('div').hide();
         if($(this).val().substring(0,4) == 'mod_'){
-            $('#contain_box > #box_module').load('/admin/' + $(this).val().substring(4) + '/system/get_links/?id=<?php e($this->data['ObjItemTree']['id'])?>').show();
+            $('#contain_box > #box_module').load('/admin/' + $(this).val().substring(4) + '/system/get_links?id=<?php e($this->data['ObjItemTree']['id'])?>').show();
         } else {
             $('#contain_box > #box_module').empty();
             $('#contain_box > #box_' + $(this).val()).show();

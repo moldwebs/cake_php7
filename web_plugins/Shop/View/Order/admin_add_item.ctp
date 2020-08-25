@@ -84,7 +84,7 @@
         <script>
             $('#FltrSearch').click(function(){
                 $('#prods_results').load('/admin/shop/order/add_item?search=1&currency=<?php e($_GET['currency'])?>&fltr_eqorrel__base_id=' + $('[name="data[prods_fltr2]"]').val() + '&fltr_lk__title=' + encodeURIComponent($('[name="data[prods_fltr1]"]').val()));
-                //$('#prods_results').load('/admin/catalog/item/pbl_related/?fltr_eqorrel__base_id=' + $('[name="data[prods_fltr2]"]').val() + '&fltr_lk__title=' + $('[name="data[prods_fltr1]"]').val());
+                //$('#prods_results').load('/admin/catalog/item/pbl_related?fltr_eqorrel__base_id=' + $('[name="data[prods_fltr2]"]').val() + '&fltr_lk__title=' + $('[name="data[prods_fltr1]"]').val());
             });
         </script>
         </form>

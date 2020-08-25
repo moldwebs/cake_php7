@@ -111,7 +111,7 @@
             if($(this).val() == 'custom'){
                 $('#contain_box > #box_module').html('').show();
             } else {
-                $('#contain_box > #box_module').load('/admin/' + $(this).val().substring(4) + '/system/get_blocks/?id=<?php e($this->data['ObjItemTree']['id'])?>').show();
+                $('#contain_box > #box_module').load('/admin/' + $(this).val().substring(4) + '/system/get_blocks?id=<?php e($this->data['ObjItemTree']['id'])?>').show();
             }
             //$('#ObjItemTreeDataCustomTemplate').trigger('change').parent().show();
         } else {
